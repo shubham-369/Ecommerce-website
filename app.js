@@ -8,7 +8,6 @@ const userRoutes = require('./routes/shop');
 const contactRoutes = require('./routes/contact');
 const successRoutes = require('./routes/success');
 
-const errorPath = path.join(__dirname, 'views', '404-error.html');
 
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -17,7 +16,9 @@ app.use(userRoutes);
 app.use(contactRoutes);
 app.use(successRoutes);
 
-app.use((req, res, )=>{
+
+const errorPath = path.join(__dirname, 'views', '404-error.html');
+app.use('*',(req, res, )=>{
     res.status(404).sendFile(errorPath);
 });
 
