@@ -1,11 +1,13 @@
 const express = require('express');
-const product = require('../controllers/admin');
+const {products, data} = require('../controllers/admin');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
-router.route('/add-product').get(product);
+router.use(bodyParser.urlencoded({extended:true}));
 
-router.use('/product',(req, res)=>{
-    res.redirect("/");
-})
+
+router.route('/add-product').get(products);
+
+router.route('/product').post(data);
 
 module.exports = router;
