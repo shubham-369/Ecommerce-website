@@ -1,14 +1,18 @@
 
 
 class Product {
-    constructor(title, page) {
+    constructor(title, url, price, desc) {
         this.title = title;
-        this.page = page;
+        this.url = url;
+        this.price = price;
+        this.desc = desc;
     }
     show(){
         return {
             Product : this.title, 
-            PageNo : this.page
+            Url : this.url,
+            Price : this.price,
+            description : this.desc
         };
     }
 }
