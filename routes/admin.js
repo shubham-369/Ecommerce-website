@@ -1,13 +1,9 @@
 const express = require('express');
-const {products, data} = require('../controllers/admin');
+const adminControllers = require('../controllers/admin');
 const router = express.Router();
-const bodyParser = require('body-parser');
 
-router.use(bodyParser.urlencoded({extended:true}));
-
-
-router.route('/add-product').get(products);
-
-router.route('/product').post(data);
+router.get('/admin-product', adminControllers.getProducts);
+router.get('/admin', adminControllers.adminProduct);
+router.post('/product', adminControllers.addProducts);
 
 module.exports = router;
