@@ -25,8 +25,22 @@ class Product {
                 throw error;
             });
     }
+    updateByID(id){
+        const query = 'UPDATE `node_complete`.`products` SET `title` = ?, `price` = ?, `description` = ?, `imageurl` = ? WHERE id =?';
+        const values = [this.title, this.price, this.desc, this.url, id];
+        return db.execute(query, values)
+            .then(() => console.log('data updated successfully'))
+            .catch(error => {
+                throw error;
+            });
+    }
     static deleteById(id){
-
+        const query = 'DELETE FROM `node_complete`.`products` WHERE id =?';
+        return db.execute(query, [id])
+            .then(() => console.log('data deleted successfully'))
+            .catch(error => {
+                throw error;
+            });
     }
 
     static fetchAll(callback){
@@ -39,7 +53,12 @@ class Product {
     }
 
     static findById(id){
-
+        const query = 'SELECT * FROM products WHERE id = ?';
+        return db.execute(query, [id])
+        .then(([rows]) => rows)
+        .catch(error => {
+            throw error;
+        });
     }
 }
 module.exports = Product;
