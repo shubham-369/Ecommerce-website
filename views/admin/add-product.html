@@ -46,6 +46,7 @@
     
     <div class="container justify-content-center">
       <form action="/admin/product" method="POST" class="mt-5">
+        <input type="hidden" name="productID" id="id">
         <div class="form-group">
           <label for="title">Title</label>
           <input type="text" class="form-control" name="title" id="title" />
@@ -62,11 +63,12 @@
           <label for="description">Description</label>
           <textarea class="form-control" rows="6" name="description" id="description"></textarea>
         </div>
-          <button class="btn btn-success mt-3" type="submit">Add product</button>
+          <button class="btn btn-success mt-3" type="submit">Add / Update product</button>
       </form>
   
 
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
