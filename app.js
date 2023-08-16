@@ -24,8 +24,7 @@ const port =  process.env.PORT || 4500;
 
 sequelize
 .sync()
-.then(result => {
-    console.log(result);
+.then(() => {
     app.listen(port);
 })
 .catch((err) => console.log('Server not running : ',err));

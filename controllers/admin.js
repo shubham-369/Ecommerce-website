@@ -1,67 +1,81 @@
-const path = require('path');
+const { where } = require('sequelize');
 const product = require('../models/product');
-const addProduct = path.join(__dirname, '..', 'views' , 'admin', 'add-product.html');
-const adminproduct = path.join(__dirname, '..', 'views', 'admin', 'admin-product.html');
 
+exports.addUpdateProducts = (req, res) => {
+    const { productID, title, url, price, description } = req.body;
+    if (productID) {
+        product.findByPk(productID)
+            .then(product => {
+                product.title = title;
+                product.imageurl = url;
+                product.price = price;
+                product.description = description;
+                return product.save();
+            })
+            .then(() => {
+                res.redirect('/admin/admin-product.html');
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ error: 'Internal server error!' });
+            });
+    } else {
+        product.create({
+            title: title,
+            imageurl: url,
+            price: price,
+            description: description
+        })
+            .then(() => {
+                res.redirect('/admin/add-product.html');
+            })
+            .catch(err => {
+                console.log(`error while saving data : ${err}`);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+    }
+};
 
-exports.addUpdateProducts = async (req, res) =>{
-    const {productID,title, url, price, description} = req.body;
-    try{
-        if (productID) {
-            const nObj = new product(title, url, price, description); 
-            await nObj.updateByID(productID);
-            res.redirect('/admin/admin-product.html');
-        }
-        else{
-            const newObj  = new product(title, url, price, description);
-            await newObj.save();
-            res.redirect('/admin/add-product.html');
-        }
-    }
-    catch (error){
-        console.log(error);
-        res.status(500).json({error : 'Internal server error'})
-    }
-}
-exports.findByID = async(req, res) =>{
+exports.findByID = (req, res) => {
     const prodID = req.params.productID;
-    try{
+    try {
         res.redirect(`/admin/add-product.html?productID=${prodID}`);
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).json({error : 'Internal server error'});
-    }
-}
-exports.fetchByID = async(req, res) =>{
-    const id = req.query.productID;    
-    try {
-        const data = await product.findById(id);
-        res.json(data);
-    } 
-    catch (err) {
+    } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
 
-exports.getProducts = async (req, res) => {
-    try {
-        const products = await product.fetchAll();
-        res.json(products);
-    } catch (error) {
-        console.error('Error fetching products:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-}
+exports.fetchByID = (req, res) => {
+    const id = req.query.productID;
+    product.findByPk(id)
+        .then(data => {
+            res.json(data.dataValues);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+};
 
-exports.deleteByID = async (req, res) => {
+exports.getProducts = (req, res) => {
+    product.findAll()
+        .then(data => {
+            res.json(data);
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+};
+
+exports.deleteByID = (req, res) => {
     const id = req.params.productID;
-    try{
-        await product.deleteById(id);
-        res.redirect('/admin/admin-product.html');
-    }
-    catch{
-        res.status(500).json({error: 'Internal server error'});
-    }
-}
+    product.destroy({ where: { id: id } })
+        .then(() => {
+            res.redirect('/admin/admin-product.html');
+        })
+        .catch(error => {
+            res.status(500).json({ error: 'Internal server error', error });
+        });
+};
