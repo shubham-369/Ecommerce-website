@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const dirname = require('./util/path');
 const bodyParser = require('body-parser');
+const sequelize = require('./util/database');
 
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -18,7 +19,13 @@ app.use('/admin', adminRoutes);
 app.use('/shop', shopRoutes);
 app.use('*', errorRoutes);
 
+
 const port =  process.env.PORT || 4500;
-app.listen(port ,()=>{
-    console.log('server is running perfectly');
-});
+
+sequelize
+.sync()
+.then(result => {
+    console.log(result);
+    app.listen(port);
+})
+.catch((err) => console.log('Server not running : ',err));
