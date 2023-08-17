@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const dirname = require('./util/path');
 const bodyParser = require('body-parser');
-const sequelize = require('./util/database');
+const sequelize = require('./models/product');
 
 app.use(bodyParser.urlencoded({extended:true}));
 
