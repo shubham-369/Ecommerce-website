@@ -1,38 +1,38 @@
-const { where } = require('sequelize');
 const product = require('../models/product');
 
 exports.addUpdateProducts = (req, res) => {
     const { productID, title, url, price, description } = req.body;
     if (productID) {
         product.findByPk(productID)
-            .then(product => {
-                product.title = title;
-                product.imageurl = url;
-                product.price = price;
-                product.description = description;
-                return product.save();
-            })
-            .then(() => {
-                res.redirect('/admin/admin-product.html');
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(500).json({ error: 'Internal server error!' });
-            });
-    } else {
-        product.create({
+        .then(product => {
+            product.title = title;
+            product.imageurl = url;
+            product.price = price;
+            product.description = description;
+            return product.save();
+        })
+        .then(() => {
+            res.redirect('/admin/admin-product.html');
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Internal server error!' });
+        });
+    }else {
+        req.user
+        .createProduct({
             title: title,
             imageurl: url,
             price: price,
             description: description
         })
-            .then(() => {
-                res.redirect('/admin/add-product.html');
-            })
-            .catch(err => {
-                console.log(`error while saving data : ${err}`);
-                res.status(500).json({ error: 'Internal server error' });
-            });
+        .then(() => {
+            res.redirect('/admin/add-product.html');
+        })
+        .catch(err => {
+            console.log(`error while saving data : ${err}`);
+            res.status(500).json({ error: 'Internal server error' });
+        });
     }
 };
 
@@ -48,18 +48,21 @@ exports.findByID = (req, res) => {
 
 exports.fetchByID = (req, res) => {
     const id = req.query.productID;
-    product.findByPk(id)
+    if(id){
+        req.user
+        .getProducts({where:{id:id}})
         .then(data => {
-            res.json(data.dataValues);
+            res.json(data[0].dataValues);
         })
         .catch(err => {
             console.log(err);
             res.status(500).json({ error: 'Internal server error' });
         });
+    }
 };
 
 exports.getProducts = (req, res) => {
-    product.findAll()
+    req.user.getProducts()
         .then(data => {
             res.json(data);
         })
