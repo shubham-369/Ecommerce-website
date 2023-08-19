@@ -7,8 +7,7 @@ const desc = document.getElementById('description');
 
 const urlParams = new URLSearchParams(window.location.search);
 const proID = urlParams.get('productID');
-
-if (title) {
+if (proID) {
     axios.get(`/admin/add-product?productID=${proID}`)
       .then((response) => {  
         const result = response.data;
