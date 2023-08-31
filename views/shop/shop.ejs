@@ -19,7 +19,7 @@
             <h3 class="card-text font-weight-bold">$ <%= element.price %></h3>
             <div class="d-flex justify-content-around">
               <a href="products?detailID=<%= element.id %>" class="btn btn-primary">Details</a>
-              <a href="cart/<%= element.id %>" class="btn btn-secondary">Add to cart</a>
+              <button data-id="<%= element.id %>" class="cart btn btn-secondary">Add to cart</button>
             </div>
           </div>
         </div>
